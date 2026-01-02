@@ -15,64 +15,63 @@ void zoomAt(int mouseX, int mouseY, double factor, double centerX, double center
     scale *= factor;
 }
 
-int mandelbrot(double centerX, double centerY, double scale) {
-    for (int py = 0; py < HEIGHT; ++py) {
-        for (int px = 0; px < WIDTH; ++px) {
-            // Map pixel to complex plane
+void renderMandelbrot(
+    sf::Image& image,
+    double centerX,
+    double centerY,
+    double scale
+) {
+    for (unsigned int py = 0; py < HEIGHT; ++py) {
+        for (unsigned int px = 0; px < WIDTH; ++px) {
+
             double x0 = centerX + (px - WIDTH / 2.0) * scale / WIDTH;
             double y0 = centerY + (py - HEIGHT / 2.0) * scale / WIDTH;
+
             std::complex<double> c(x0, y0);
             std::complex<double> z(0, 0);
 
             int iteration = 0;
-            while (abs(z) <= 2.0 && iteration < MAX_ITER) {
-                z = z*z + c;
+            while (std::abs(z) <= 2.0 && iteration < MAX_ITER) {
+                z = z * z + c;
                 iteration++;
             }
 
-            // Color pixel based on iteration
-            // COLOR BLACK and WHite Value Somewhere in the scale of 1-255
-            int color = (int)(255.0 * iteration / MAX_ITER);
-            return color;
+            int color = static_cast<int>(255.0 * iteration / MAX_ITER);
+            image.setPixel({px, py}, sf::Color(color, color, color));
         }
-        // if 0 print new line
-        return 0;
     }
-    return -1;
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "SFML window");
+    sf::RenderWindow window(
+        sf::VideoMode({WIDTH, HEIGHT}),
+        "Mandelbrot"
+    );
 
-    // Load a music to play
-    sf::Music music("Fantascape.ogg");
-
-    // Play the music
-    music.play();
+    sf::Image image({WIDTH, HEIGHT}, sf::Color::Black);
+    sf::Texture texture;
 
     double centerX = -0.5;
     double centerY = 0.0;
-    double scale = 4.0;
+    double scale   = 4.0;
 
-     // Start the game loop
-    while (window.isOpen())
-    {
-        // Process events
-        while (const std::optional event = window.pollEvent())
-        {
-            // Close window: exit
+    renderMandelbrot(image, centerX, centerY, scale);
+    // load texture to image
+    if(!texture.loadFromImage(image)){
+        std::cout << "Error Loading Texture";
+        return 1;
+    }
+
+    sf::Sprite sprite(texture);
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>())
                 window.close();
         }
 
-        // Clear screen
         window.clear();
-
-
-        // Update the window
+        window.draw(sprite);
         window.display();
     }
-    
-    
-    return 0;
 }
