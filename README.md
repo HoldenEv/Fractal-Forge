@@ -1,1 +1,1 @@
-Welcome to Fractal-Forge a little program I wrote using c++ library [SFML](https://www.sfml-dev.org/)
+Welcome to Fractal-Forge a little program I wrote to visuallize some beautuful math sets. I built this application using c++ and a multimedia library called [Simple and Fast Multimedia Library SFML](https://www.sfml-dev.org/)
