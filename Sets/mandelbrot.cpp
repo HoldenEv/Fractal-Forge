@@ -2,7 +2,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <complex>
-#include "fractal_forge.h"
+#include "../fractal_forge.h"
 
 void renderMandelbrot(
     sf::Image& image,
