@@ -2,6 +2,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <complex>
+#include <thread>
+#include <mutex>
 #include "../fractal_forge.h"
 
 void renderMandelbrot(
